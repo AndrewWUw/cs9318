@@ -14,9 +14,9 @@ public class Proj1 {
 		if (args.length == 6 ) {
 			try {
 				
-				loadFile(args[0]);
+				FileLoadder.loadFile(args[0]);
 				System.out.println();
-				loadFile(args[1]);
+				FileLoadder.loadFile(args[1]);
 				String method = args[2];
 				int width = Integer.parseInt(args[3]);
 				int depth = Integer.parseInt(args[4]);
@@ -43,21 +43,7 @@ public class Proj1 {
 
 	}
 	
-	
-	private static void loadFile(String fileName) throws IOException {
 
-		BufferedReader br = new BufferedReader(new FileReader(new File(
-				"SampleData/" + fileName)));
-		StringBuffer buffer = new StringBuffer();
-		while (true) {
-			String str = br.readLine();
-			if (str == null) {
-				break;
-			}
-			buffer.append(str);
-		}
-		br.close();
-	}
 	
 	private static void handleExceptions (Exception e) {
 		e.printStackTrace();
