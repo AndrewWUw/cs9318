@@ -1,0 +1,3 @@
+cbccbc 0 9
+bccbcc 4 7
+ccacca 4 9

@@ -1,0 +1,10 @@
+ccacca:1 abbabb:3 bbcbbc:3 bcabca:1 abaaba:5 bbabba:4
+babbab:2 abbabb:2 bbabba:4 acaaca:1 babbab:3 caccac:4
+ccacca:1 acaaca:1 acaaca:5 bacbac:4 caccac:2 acbacb:5 cabcab:3
+cabcab:2 cbccbc:3 cbbcbb:4 cbccbc:2 abbabb:3 cabcab:3
+abbabb:1 bcabca:4 acaaca:2 bccbcc:5 acaaca:5
+bbabba:4 cccccc:3 bbbbbb:2 bcabca:5 ccacca:5 bccbcc:1
+babbab:5 babbab:4 bcabca:1 cbccbc:3 caccac:4 caacaa:3 baabaa:4
+acbacb:2 abbabb:1 abbabb:5 ccacca:5 bccbcc:3
+ccbccb:2 aabaab:5 bcabca:2 cbacba:5 abbabb:5
+ccacca:2 cbccbc:4 acaaca:1 abaaba:5 bccbcc:3 ccacca:5
