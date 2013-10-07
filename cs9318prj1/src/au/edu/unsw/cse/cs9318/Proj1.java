@@ -2,7 +2,6 @@ package au.edu.unsw.cse.cs9318;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -34,11 +33,12 @@ public class Proj1 {
 			System.err.println("** Input arguments error, please input the six arguments in the following order: **");
 			System.err.println("** DATAFILE:  The file that contains the data stream items.                      **");
 			System.err.println("** QUERYFILE: The file that contains the queries.                                **");
-			System.err.println("** METHOD:    It is a string of either time or item.                             **");
+			System.err.println("** METHOD:    It is a string of either \"time\" or \"item\".                         **");
 			System.err.println("** WIDTH:     It is the width of each cm-sketch.                                 **");
 			System.err.println("** DEPTH:     It is the depth of each cm-sketch.                                 **");
 			System.err.println("** SEED:      It is an integer that initiates the random generator in Java.      **");
 			System.err.println("===================================================================================");
+			System.exit(1);
 		}
 
 	}
