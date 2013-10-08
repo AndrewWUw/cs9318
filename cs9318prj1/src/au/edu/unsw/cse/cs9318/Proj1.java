@@ -1,9 +1,7 @@
 package au.edu.unsw.cse.cs9318;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
+import java.util.List;
 
 public class Proj1 {
 
@@ -13,14 +11,17 @@ public class Proj1 {
 	public static void main(String[] args) {
 		if (args.length == 6 ) {
 			try {
+				List<String> inputFile = FileLoadder.loadFile(args[0]);
+				List<String> queryFile = FileLoadder.loadFile(args[1]);
 				
-				FileLoadder.loadFile(args[0]);
-				System.out.println();
-				FileLoadder.loadFile(args[1]);
-				String method = args[2];
-				int width = Integer.parseInt(args[3]);
+				List<List<String[]>> input = FileLoadder.processInputFile(inputFile);
+				List<String[]> query = FileLoadder.processQueryFile(inputFile);
+		       		int width = Integer.parseInt(args[3]);
 				int depth = Integer.parseInt(args[4]);
 				int seed = Integer.parseInt(args[5]);
+				
+                                                                
+
 				
 			} catch (NumberFormatException e) {
 				handleExceptions(e);
