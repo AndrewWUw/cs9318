@@ -12,28 +12,46 @@ public class CMSKetche {
 		// for (int[] s : list) {
 		//
 		// }
+		// System.out.println("k".hashCode());
+		System.out.println((1388524629 * ("k".hashCode()) + 557894633) % p + p);
+		System.out.println(Integer.MAX_VALUE);
+		System.out.println(Float.MAX_VALUE);
+		System.out.println(Long.MAX_VALUE);
+		System.out.println((long) 1388524629 * ("c".hashCode() + 557894633) % p
+				% 32);
 	}
 
-	public static void countMinSketch() {
-	}
-
-	public static List<int[]> hashFunction(List<String[]> data,
-			List<int[]> aAndB, int w) {
-		List<int[]> result = new ArrayList<int[]>();
-		for (String[] list : data) {
-			int[] arr = new int[data.size()];
-			for (int i = 0; i < list.length; i++) {
-				int x = list[i].hashCode();
-				int a = ((aAndB.get(0)[i] * x) + aAndB.get(1)[i]) % p;
-				if (a >= 0) {
-
-				} else {
-
-				}
+	public static void countMinSketch(List<List<String[]>> input, int width,
+			int depth, int seed) {
+		int[][] array = new int[width][depth];
+		for (List<String[]> list : input) {
+			for (String[] strs : list) {
+				
 			}
+		}
+	}
 
-			result.add(arr);
+	/**
+	 * 
+	 * @param data
+	 * @param w
+	 * @param d
+	 * @param seed
+	 * @return
+	 */
+	public static List<Integer> hashFunction(String data, int w, int d, int seed) {
+		List<Integer> result = new ArrayList<Integer>();
+		List<int[]> aAndB = prepareHash(d, seed);
+		for (int i = 0; i < d; i++) {
+			int x = data.hashCode();
+			int[] arr = aAndB.get(i);
+			long r = (((long) arr[0] * x) + arr[1]) % p;
+			if (r >= 0) {
+				r = r % w;
+			} else {
 
+			}
+			result.add((int) r);
 		}
 
 		return result;

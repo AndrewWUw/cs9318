@@ -16,7 +16,7 @@ public class Proj1 {
 				
 				List<List<String[]>> input = FileLoadder.processInputFile(inputFile);
 				List<String[]> query = FileLoadder.processQueryFile(inputFile);
-		       		int width = Integer.parseInt(args[3]);
+				int width = Integer.parseInt(args[3]);
 				int depth = Integer.parseInt(args[4]);
 				int seed = Integer.parseInt(args[5]);
 				
