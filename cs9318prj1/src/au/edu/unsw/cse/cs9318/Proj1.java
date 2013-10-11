@@ -16,12 +16,14 @@ public class Proj1 {
 				
 				List<List<String[]>> input = FileLoadder.processInputFile(inputFile);
 				List<String[]> query = FileLoadder.processQueryFile(inputFile);
+				
+				String method = args[2];
 				int width = Integer.parseInt(args[3]);
 				int depth = Integer.parseInt(args[4]);
 				int seed = Integer.parseInt(args[5]);
 				
-                                                                
-
+				
+                CMSKetche.countMinSketch(input, width, depth, seed);                                               
 				
 			} catch (NumberFormatException e) {
 				handleExceptions(e);
@@ -48,7 +50,7 @@ public class Proj1 {
 	
 	private static void handleExceptions (Exception e) {
 		e.printStackTrace();
-//		System.err.println(e.getStackTrace());
+		// System.err.println(e.getStackTrace());
 		System.exit(1);
 	}
 }
