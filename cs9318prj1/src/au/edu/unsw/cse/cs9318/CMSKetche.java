@@ -28,18 +28,18 @@ public class CMSKetche {
 	 * @param depth
 	 * @param seed
 	 */
-	public static void countMinSketch(List<List<String[]>> input, int width,
+	public static void countMinSketch(List<String[]> input, int width,
 			int depth, int seed) {
 		int[][] array = new int[depth][width];
-		for (List<String[]> list : input) {
-			for (String[] strs : list) {
+//		for (List<String[]> list : input) {
+			for (String[] strs : input) {
 				List<Integer> l = hashFunction(strs[0], width, depth, seed);
 				for (int i = 0; i < depth; i++) {
 					int b = l.get(i);
 					array[i][b] += Integer.parseInt(strs[1]);
 				}
 			}
-		}
+//		}
 		for (int i = 0; i < depth; i++) {
 			for (int j = 0; j < width; j++) {
 				System.out.print(array[i][j] + "  ");
