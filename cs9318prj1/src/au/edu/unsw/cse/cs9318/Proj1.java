@@ -23,7 +23,7 @@ public class Proj1 {
 				int seed = Integer.parseInt(args[5]);
 				
 				
-                CMSKetche.countMinSketch(input.get(0), width, depth, seed);                                               
+                CMSKetche.countMinSketch(input.get(9), width, depth, seed);                                               
 				
 			} catch (NumberFormatException e) {
 				handleExceptions(e);
