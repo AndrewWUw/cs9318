@@ -7,7 +7,8 @@ import java.util.Random;
 public class CMSKetch {
 	private static final int p = 2147483647;
 
-	// public static void main(String[] args) {
+	 public static void main(String[] args) {
+		 System.out.println(1 % 2);
 	// List<int[]> list = hashFunction(2, 1234);
 	// for (int[] s : list) {
 	//
@@ -21,7 +22,7 @@ public class CMSKetch {
 	// System.out.println((long) 1388524629 * ("c".hashCode() + 557894633) %
 	// p
 	// % 32);
-	// }
+	 }
 
 	/**
 	 * 
@@ -31,7 +32,7 @@ public class CMSKetch {
 	 * @param seed
 	 * @return
 	 */
-	public static int[][] countMinSketch(List<String[]> input, int width,
+	private static int[][] countMinSketch(List<String[]> input, int width,
 			int depth, int seed) {
 		int[][] array = new int[depth][width];
 		for (String[] strs : input) {
@@ -41,28 +42,53 @@ public class CMSKetch {
 				array[i][b] += Integer.parseInt(strs[1]);
 			}
 		}
-		for (int i = 0; i < depth; i++) {
-			for (int j = 0; j < width; j++) {
-				System.out.print(array[i][j] + "   ");
-			}
-			System.out.println();
-		}
+		// for (int i = 0; i < depth; i++) {
+		// for (int j = 0; j < width; j++) {
+		// System.out.print(array[i][j] + "   ");
+		// }
+		// System.out.println();
+		// }
 		return array;
 	}
 
-	public static void countMinSketchs(List<List<String[]>> input, int width,
+	private static void timeCMSketchs(List<List<String[]>> input, int width,
 			int depth, int seed) {
 
+		List<int[][]> list = new ArrayList<int[][]>();
+		// Calculate how many arrays Mi requires
+		int l = input.size();
+		double t1 = Math.log(l) / Math.log(2);
+		int t = (int) t1;
+		// Init t CMSketches
+		for (int i = 0; i < t; i++) {
+			list.add(new int[depth][width]);
+		}
+		
+		for (int i = 0; i < l; i++) {
+			// for (List<String[]> list : input) {
+			int[][] arr = countMinSketch(input.get(i), width, depth, seed);
+			// list.set(0, arr);
+			while ((i % Math.pow(2, i)) == 0) {
+				
+				for (int j = 0; j < Math.pow(2, i); j++) {
+					int[][] temp = list.get(i);
+					list.set(i, arr);
+					arr = merge(arr, temp);
+					
+				}
+			}
+		}
 	}
 
 	/**
 	 * @param data
-	 * @param w
+	 * @param wa
 	 * @param d
 	 * @param seed
 	 * @return
 	 */
-	public static List<Integer> hashFunction(String data, int w, int d, int seed) {
+	private static List<Integer> hashFunction(String data, int w, int d,
+			int seed) {
 		List<Integer> result = new ArrayList<Integer>();
 		List<int[]> aAndB = prepareHash(d, seed);
 		for (int i = 0; i < d; i++) {
@@ -106,20 +132,40 @@ public class CMSKetch {
 
 	public static void timeAggregation(List<List<String[]>> input,
 			List<String[]> query, int w, int d, int seed) {
-		
-		for(String[] strs : query) {
+		List<int[][]> arrays = new ArrayList<int[][]>();
+		timeCMSketchs(input, w, d, seed);
+
+		for (String[] strs : query) {
 			String item = strs[0];
 			int startTime = Integer.parseInt(strs[1]);
 			int endTime = Integer.parseInt(strs[2]);
-			
-			
-			
+			double t1 = Math.log(endTime - startTime + 1) / Math.log(2);
+			int t = (int) t1;
+			for (int i = startTime; i < endTime; i++) {
+
+			}
+
 		}
-		
+
 	}
 
 	public static void itemAggregration(List<List<String[]>> input,
 			List<String[]> query, int w, int d, int seed) {
 
 	}
+
+	private static int[][] merge(int[][] arr1, int[][] arr2) {
+		int[][] arr = new int[arr1.length][arr1[0].length];
+		for (int i = 0; i < arr1.length; i++) {
+			for (int j = 0; j < arr1[0].length; j++) {
+				arr[i][j] = arr1[i][j] + arr2[i][j];
+			}
+		}
+		return arr;
+	}
+
+	private static void add(int[][] arr1, int[][] arr2) {
+
+	}
+
 }
