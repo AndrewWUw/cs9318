@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class CMSKetche {
+public class CMSKetch {
 	private static final int p = 2147483647;
 
 	// public static void main(String[] args) {
@@ -48,6 +48,11 @@ public class CMSKetche {
 			System.out.println();
 		}
 		return array;
+	}
+
+	public static void countMinSketchs(List<List<String[]>> input, int width,
+			int depth, int seed) {
+
 	}
 
 	/**
@@ -99,11 +104,22 @@ public class CMSKetche {
 		return list;
 	}
 
-	public static void timeAggregation() {
-
+	public static void timeAggregation(List<List<String[]>> input,
+			List<String[]> query, int w, int d, int seed) {
+		
+		for(String[] strs : query) {
+			String item = strs[0];
+			int startTime = Integer.parseInt(strs[1]);
+			int endTime = Integer.parseInt(strs[2]);
+			
+			
+			
+		}
+		
 	}
 
-	public static void itemAggregration() {
+	public static void itemAggregration(List<List<String[]>> input,
+			List<String[]> query, int w, int d, int seed) {
 
 	}
 }
