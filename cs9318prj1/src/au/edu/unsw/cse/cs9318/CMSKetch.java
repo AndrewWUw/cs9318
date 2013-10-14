@@ -7,22 +7,22 @@ import java.util.Random;
 public class CMSKetch {
 	private static final int p = 2147483647;
 
-	 public static void main(String[] args) {
-		 System.out.println(1 % 2);
-	// List<int[]> list = hashFunction(2, 1234);
-	// for (int[] s : list) {
-	//
-	// }
-	// System.out.println("k".hashCode());
-	// System.out.println((1388524629 * ("k".hashCode()) + 557894633) % p +
-	// p);
-	// System.out.println(Integer.MAX_VALUE);
-	// System.out.println(Float.MAX_VALUE);
-	// System.out.println(Long.MAX_VALUE);
-	// System.out.println((long) 1388524629 * ("c".hashCode() + 557894633) %
-	// p
-	// % 32);
-	 }
+	public static void main(String[] args) {
+//		System.out.println(3 % 4);
+		// List<int[]> list = hashFunction(2, 1234);
+		// for (int[] s : list) {
+		//
+		// }
+		// System.out.println("k".hashCode());
+		// System.out.println((1388524629 * ("k".hashCode()) + 557894633) % p +
+		// p);
+		// System.out.println(Integer.MAX_VALUE);
+		// System.out.println(Float.MAX_VALUE);
+		// System.out.println(Long.MAX_VALUE);
+		// System.out.println((long) 1388524629 * ("c".hashCode() + 557894633) %
+		// p
+		// % 32);
+	}
 
 	/**
 	 * 
@@ -55,28 +55,43 @@ public class CMSKetch {
 			int depth, int seed) {
 
 		List<int[][]> list = new ArrayList<int[][]>();
+		// List<Double> update = new ArrayList<Double>();
 		// Calculate how many arrays Mi requires
 		int l = input.size();
 		double t1 = Math.log(l) / Math.log(2);
-		int t = (int) t1;
-		// Init t CMSketches
-		for (int i = 0; i < t; i++) {
+		int j = (int) t1;
+		// Init j CMSketches
+		for (int i = 0; i <= j; i++) {
 			list.add(new int[depth][width]);
+			// update.add(Math.pow(2, i));
 		}
-		
-		for (int i = 0; i < l; i++) {
-			// for (List<String[]> list : input) {
-			int[][] arr = countMinSketch(input.get(i), width, depth, seed);
-			// list.set(0, arr);
-			while ((i % Math.pow(2, i)) == 0) {
-				
-				for (int j = 0; j < Math.pow(2, i); j++) {
-					int[][] temp = list.get(i);
-					list.set(i, arr);
-					arr = merge(arr, temp);
-					
+
+		for (int t = 0; t < l; t++) {
+			int[][] newArr = countMinSketch(input.get(t), width, depth, seed);
+			double ts = Math.pow(2, t + 1);
+			// list.set(0, newArr);
+
+			for (int m = 0; m <= j; m++) {
+				// if (Math.pow(2, m) == ts) {
+				if ((t + 1) % Math.pow(2, m) == 0) {
+					for (int k = 0; k <= m; k++) {
+						int[][] temp = list.get(k);
+						int[][] arr = newArr;
+ 						list.set(k, arr);
+						newArr = merge(newArr, temp);
+					}
 				}
 			}
+		}
+
+		for (int[][] arr : list) {
+			for (int i = 0; i < arr.length; i++) {
+				for (int f = 0; f < arr[0].length; f++) {
+					System.out.print(arr[i][f] + "   ");
+				}
+				System.out.println();
+			}
+			System.out.println();
 		}
 	}
 
@@ -103,7 +118,7 @@ public class CMSKetch {
 			} else {
 				r = (r + p) % w;
 			}
-			System.out.println(r);
+			// System.out.println(r);
 			result.add((int) r);
 		}
 		return result;
@@ -165,6 +180,20 @@ public class CMSKetch {
 	}
 
 	private static void add(int[][] arr1, int[][] arr2) {
+		++lnum;
+		int kz = 0;
+		while (Math.pow(2, kz) < Math.pow(2, siz + 1)) {
+			if ((lnum) % Math.pow(2, kz) == 0) {
+				if (CM.size() <= kz) {
+					int[][] ta = new int[DEPTH][WIDTH];
+					bean as = new bean(0, 0, ta);
+					CM.add(as);
+					++siz;
+				}
+				CM.get(kz).setUpdate(1);
+			}
+			kz++;
+		}
 
 	}
 
