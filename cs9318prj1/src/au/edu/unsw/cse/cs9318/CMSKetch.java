@@ -31,7 +31,7 @@ public class CMSKetch {
 	}
 
 	/**
-	 * 
+	 * Generate CM array based on input
 	 * @param input
 	 * @param width
 	 * @param depth
@@ -102,6 +102,14 @@ public class CMSKetch {
 		return list;
 	}
 
+	/**
+	 * Generate CM-Sketch arrays for input data
+	 * @param input
+	 * @param width
+	 * @param depth
+	 * @param seed
+	 * @return
+	 */
 	private static List<int[][]> itemCMSketches(List<List<String[]>> input,
 			int width, int depth, int seed) {
 		List<int[][]> list = new ArrayList<int[][]>();
@@ -134,6 +142,7 @@ public class CMSKetch {
 	}
 
 	/**
+	 * The hash function used is (a*x + b) % p % w
 	 * @param data
 	 * @param wa
 	 * @param d
@@ -146,23 +155,19 @@ public class CMSKetch {
 		List<int[]> aAndB = prepareHash(d, seed);
 		for (int i = 0; i < d; i++) {
 			int x = data.hashCode();
-			// System.out.print(i + ": " + x + " ");
-			// System.out.print("a" + i + "=" + aAndB.get(0)[i] + "   ");
-			// System.out.println("b" + i + "=" +aAndB.get(1)[i]);
 			long r = (((long) aAndB.get(0)[i] * x) + aAndB.get(1)[i]) % p;
-			// System.out.print(r + "  ");
 			if (r >= 0) {
 				r = r % w;
 			} else {
 				r = (r + p) % w;
 			}
-			// System.out.println(r);
 			result.add((int) r);
 		}
 		return result;
 	}
 
 	/**
+	 * Output the a,b needs in the hashfunction, based on depth of the array, and seed
 	 * @param depth
 	 * @param seed
 	 * @return
@@ -234,6 +239,14 @@ public class CMSKetch {
 
 	}
 
+	/**
+	 * Perfoem item aggregration on input and query
+	 * @param input
+	 * @param query
+	 * @param w
+	 * @param d
+	 * @param seed
+	 */
 	public static void itemAggregration(List<List<String[]>> input,
 			List<String[]> query, int w, int d, int seed) {
 		List<int[][]> sketches = itemCMSketches(input, w, d, seed);
@@ -251,6 +264,12 @@ public class CMSKetch {
 		}
 	}
 
+	/**
+	 * Merge two input arrays into one array
+	 * @param arr1
+	 * @param arr2
+	 * @return
+	 */
 	private static int[][] merge(int[][] arr1, int[][] arr2) {
 		int[][] arr = new int[arr1.length][arr1[0].length];
 		for (int i = 0; i < arr1.length; i++) {
@@ -261,6 +280,11 @@ public class CMSKetch {
 		return arr;
 	}
 
+	/**
+	 * Fold the input array by half
+	 * @param arr1
+	 * @return
+	 */
 	private static int[][] fold(int[][] arr1) {
 		int depth = arr1.length;
 		int width = arr1[0].length / 2;
@@ -275,7 +299,7 @@ public class CMSKetch {
 	}
 
 	/**
-	 * 
+	 * Find the min value from input CM-Sketch array
 	 * @param sketches
 	 * @param str
 	 * @param w
