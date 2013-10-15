@@ -66,21 +66,19 @@ public class FileLoadder {
 		return resultList;
 	}
 
-	public static void main(String[] args) {
-		try {
-			List<String> l = loadFile("query-a.txt");
-			// List<List<String[]>> resultList = new
-			// ArrayList<List<String[]>>();
-			List<String[]> resultList = new ArrayList<String[]>();
-			resultList = processQueryFile(l);
-			for (String[] s : resultList) {
-				System.out
-						.print("(" + s[0] + ", " + s[1] + ", " + s[2] + ")  ");
-			}
-			System.out.println();
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+	// public static void main(String[] args) {
+	// try {
+	// List<String> l = loadFile("query-a.txt");
+	// List<String[]> resultList = new ArrayList<String[]>();
+	// resultList = processQueryFile(l);
+	// for (String[] s : resultList) {
+	// System.out
+	// .print("(" + s[0] + ", " + s[1] + ", " + s[2] + ")  ");
+	// }
+	// System.out.println();
+	//
+	// } catch (IOException e) {
+	// e.printStackTrace();
+	// }
+	// }
 }
