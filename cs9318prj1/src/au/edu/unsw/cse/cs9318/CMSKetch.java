@@ -4,11 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import javax.swing.text.html.parser.Entity;
+
 public class CMSKetch {
 	private static final int p = 2147483647;
 
 	public static void main(String[] args) {
-//		System.out.println(3 % 4);
+		// System.out.println(Math.log(3) / Math.log(2));
+		// System.out.println(Math.log(5) / Math.log(2));
+		// System.out.println(Math.log(6) / Math.log(2));
+		// System.out.println(3 % 4);
+		// System.out.println(Math.pow(2, 5));
 		// List<int[]> list = hashFunction(2, 1234);
 		// for (int[] s : list) {
 		//
@@ -51,8 +57,8 @@ public class CMSKetch {
 		return array;
 	}
 
-	private static void timeCMSketchs(List<List<String[]>> input, int width,
-			int depth, int seed) {
+	private static List<int[][]> timeCMSketchs(List<List<String[]>> input,
+			int width, int depth, int seed) {
 
 		List<int[][]> list = new ArrayList<int[][]>();
 		// List<Double> update = new ArrayList<Double>();
@@ -77,7 +83,7 @@ public class CMSKetch {
 					for (int k = 0; k <= m; k++) {
 						int[][] temp = list.get(k);
 						int[][] arr = newArr;
- 						list.set(k, arr);
+						list.set(k, arr);
 						newArr = merge(newArr, temp);
 					}
 				}
@@ -93,6 +99,38 @@ public class CMSKetch {
 			}
 			System.out.println();
 		}
+		return list;
+	}
+
+	private static List<int[][]> itemCMSketches(List<List<String[]>> input,
+			int width, int depth, int seed) {
+		List<int[][]> list = new ArrayList<int[][]>();
+
+		for (int t = 0; t < input.size(); t++) {
+			int[][] array = countMinSketch(input.get(t), width, depth, seed);
+			list.add(t, array);
+
+			double t1 = Math.log(t + 1) / Math.log(2);
+			int m = (int) t1;
+
+			for (int k = 1; k <= m; k++) {
+				int index = (int) (t - Math.pow(2, k));
+				if (index >= 0) {
+					list.set(index, fold(list.get(index)));
+				}
+			}
+		}
+
+		for (int[][] l : list) {
+			for (int i = 0; i < l.length; i++) {
+				for (int j = 0; j < l[i].length; j++) {
+					System.out.print(l[i][j] + "   ");
+				}
+				System.out.println();
+			}
+			System.out.println();
+		}
+		return list;
 	}
 
 	/**
@@ -147,17 +185,49 @@ public class CMSKetch {
 
 	public static void timeAggregation(List<List<String[]>> input,
 			List<String[]> query, int w, int d, int seed) {
-		List<int[][]> arrays = new ArrayList<int[][]>();
-		timeCMSketchs(input, w, d, seed);
+		List<int[][]> sketches = timeCMSketchs(input, w, d, seed);
+
+		int size = input.size();
+		double t1 = Math.log(size) / Math.log(2);
+		int t = (int) t1;
 
 		for (String[] strs : query) {
 			String item = strs[0];
 			int startTime = Integer.parseInt(strs[1]);
 			int endTime = Integer.parseInt(strs[2]);
-			double t1 = Math.log(endTime - startTime + 1) / Math.log(2);
-			int t = (int) t1;
-			for (int i = startTime; i < endTime; i++) {
+			int[] period = new int[endTime - startTime + 1];
+			for (int i = 0; i <= endTime - startTime; i++) {
+				period[i] = startTime + i;
+			}
 
+			// calculate the timestamps stored in each array
+			List<int[]> items = new ArrayList<int[]>();
+			List<List<Integer>> itema = new ArrayList<List<Integer>>();
+			for (int j = 0; j < t; j++) {
+				int res = (int) Math.pow(2, j);
+				// int[] range = new int[res];
+				List<Integer> ranges = new ArrayList<Integer>();
+				int span = size / res;
+
+				for (int i = 0; i < res; i++) {
+					// range[i] = i + span * res;
+					ranges.add(i + span * res);
+				}
+				// items.add(range);
+				itema.add(ranges);
+			}
+
+			// int[] count = new int[t];
+			List<Integer> count = new ArrayList<Integer>();
+			// Find the location of starttime & endtime
+			for (List<Integer> l : itema) {
+				int cnt = 0;
+				for (int i = 0; i < period.length; i++) {
+					if (l.contains(period[i])) {
+						cnt++;
+					}
+				}
+				count.add(cnt);
 			}
 
 		}
@@ -166,7 +236,19 @@ public class CMSKetch {
 
 	public static void itemAggregration(List<List<String[]>> input,
 			List<String[]> query, int w, int d, int seed) {
-
+		List<int[][]> sketches = itemCMSketches(input, w, d, seed);
+		for (String[] strs : query) {
+			String item = strs[0];
+			int startTime = Integer.parseInt(strs[1]);
+			int endTime = Integer.parseInt(strs[2]);
+			
+			List<Integer> location = findMin(sketches, item, w, d, seed);
+			
+			for (int i = startTime; i <= endTime; i++) {
+				System.out.print(location.get(i) + ",");
+			}
+			System.out.println();
+		}
 	}
 
 	private static int[][] merge(int[][] arr1, int[][] arr2) {
@@ -179,22 +261,81 @@ public class CMSKetch {
 		return arr;
 	}
 
-	private static void add(int[][] arr1, int[][] arr2) {
-		++lnum;
-		int kz = 0;
-		while (Math.pow(2, kz) < Math.pow(2, siz + 1)) {
-			if ((lnum) % Math.pow(2, kz) == 0) {
-				if (CM.size() <= kz) {
-					int[][] ta = new int[DEPTH][WIDTH];
-					bean as = new bean(0, 0, ta);
-					CM.add(as);
-					++siz;
-				}
-				CM.get(kz).setUpdate(1);
-			}
-			kz++;
-		}
+	private static int[][] fold(int[][] arr1) {
+		int depth = arr1.length;
+		int width = arr1[0].length / 2;
+		int[][] res = new int[depth][width];
 
+		for (int i = 0; i < res.length; i++) {
+			for (int j = 0; j < res[i].length; j++) {
+				res[i][j] = arr1[i][j] + arr1[i][j + (width)];
+			}
+		}
+		return res;
 	}
 
+	/**
+	 * 
+	 * @param sketches
+	 * @param str
+	 * @param w
+	 * @param d
+	 * @param seed
+	 * @return
+	 */
+	private static List<Integer> findMin(List<int[][]> sketches, String str, int w,
+			int d, int seed) {
+		List<Integer> res = new ArrayList<Integer>();
+
+		for (int[][] sketch : sketches) {
+			List<Integer> l = hashFunction(str, sketch[0].length, d, seed);
+			int min = Integer.MAX_VALUE;
+			for (int i = 0; i < sketch.length; i++) {
+				if (min > sketch[i][l.get(i)]) {
+					min = sketch[i][l.get(i)];
+				}
+			}
+			res.add(min);
+			min = Integer.MAX_VALUE;
+		}
+		return res;
+	}
+
+	private static void chooseSketch(int sketchCount, int timeStampCount,
+			int startTime, int endTime) {
+		int[] period = new int[endTime - startTime + 1];
+		for (int i = 0; i <= endTime - startTime; i++) {
+			period[i] = startTime + i;
+		}
+
+		// calculate the timestamps stored in each sketch
+		List<int[]> items = new ArrayList<int[]>();
+		List<List<Integer>> item = new ArrayList<List<Integer>>();
+		for (int j = 0; j < timeStampCount; j++) {
+			int res = (int) Math.pow(2, j);
+			// int[] range = new int[res];
+			List<Integer> ranges = new ArrayList<Integer>();
+			int span = size / res;
+
+			for (int i = 0; i < res; i++) {
+				// range[i] = i + span * res;
+				ranges.add(i + span * res);
+			}
+			// items.add(range);
+			item.add(ranges);
+		}
+
+		// int[] count = new int[t];
+		List<Integer> count = new ArrayList<Integer>();
+		// Find the location of starttime & endtime
+		for (List<Integer> l : item) {
+			int cnt = 0;
+			for (int i = 0; i < period.length; i++) {
+				if (l.contains(period[i])) {
+					cnt++;
+				}
+			}
+			count.add(cnt);
+		}
+	}
 }

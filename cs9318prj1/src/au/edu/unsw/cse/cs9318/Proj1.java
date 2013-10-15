@@ -19,11 +19,10 @@ public class Proj1 {
 				int depth = Integer.parseInt(args[4]);
 				int seed = Integer.parseInt(args[5]);
 				
-				System.out.println(6 % 1);
 				if (method.equals("time")) {
 					CMSKetch.timeAggregation(input, query, width, depth, seed);
 				} else if (method.equals("item")) {
-//					CMSKetch.itemAggregration();
+					CMSKetch.itemAggregration(input, query, width, depth, seed);
 				}
 //				CMSKetch.countMinSketch(input.get(5), width, depth, seed);
 
