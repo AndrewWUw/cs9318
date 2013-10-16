@@ -343,11 +343,11 @@ public class CMSKetch {
 			List<Integer> value, int length) {
 		List<Integer> output = new ArrayList<Integer>();
 		int cnt = 0;
-		if (count.get(0) > 0) {
+		if (count.get(0) == 1) {
 			output.add(value.get(0));
 			cnt++;
 		} else {
-			if (count.get(1) > 0) {
+			if (count.get(1) == 2) {
 				output.add(value.get(1));
 				cnt++;
 			}
