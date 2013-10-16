@@ -346,6 +346,11 @@ public class CMSKetch {
 		if (count.get(0) > 0) {
 			output.add(value.get(0));
 			cnt++;
+		} else {
+			if (count.get(1) > 0) {
+				output.add(value.get(1));
+				cnt++;
+			}
 		}
 		if (count.get(1) > 0) {
 			output.add(value.get(1));
